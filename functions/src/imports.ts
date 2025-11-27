@@ -14,7 +14,7 @@ import admin from "firebase-admin";
 //   max: 100 // limit each IP to 100 requests per windowMs
 // });
 
-var serviceAccount = require("./serviceKey.json")
+var serviceAccount = require("./service-key.json")
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
   

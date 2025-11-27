@@ -9,4 +9,4 @@ typings/
 node_modules/
 *.local
 
-serviceKey.json
+service-key.json
