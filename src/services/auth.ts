@@ -1,11 +1,11 @@
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
-import type { LoginFormProps, RegisterFormProps } from "../interfaces";
+import type { LoginFormInterface, RegisterFormInterface } from "../interfaces";
 import { auth } from "@/firebase";
 import { saveUserProfile } from "./user-service";
 import type { AuthResultType } from "@/types";
-import type { UserImplProps } from "@/interfaces/firebaseAuth";
+import type { UserImplInterface } from "@/interfaces/firebaseAuth";
 
-export const registerAccount = async (data: RegisterFormProps): Promise<AuthResultType> => {
+export const registerAccount = async (data: RegisterFormInterface): Promise<AuthResultType> => {
     const { email, password, name } = data
 
     let result: AuthResultType = { success: true, message: '', data: {} }
@@ -35,7 +35,7 @@ export const registerAccount = async (data: RegisterFormProps): Promise<AuthResu
 
     return result
 };
-export const loginAccount = async ({ email, password }: LoginFormProps, setCurrentUser: (e: UserImplProps | null) => void): Promise<AuthResultType> => {
+export const loginAccount = async ({ email, password }: LoginFormInterface, setCurrentUser: (e: UserImplInterface | null) => void): Promise<AuthResultType> => {
 
     let result: AuthResultType = { success: true, message: '', data: {} }
 
@@ -44,9 +44,7 @@ export const loginAccount = async ({ email, password }: LoginFormProps, setCurre
             .then(async (credential) => {
                 // Signed in
                 const user: any = credential.user;
-                
                 user.localId = credential.user.uid;
-
                 setCurrentUser(user);
             })
 

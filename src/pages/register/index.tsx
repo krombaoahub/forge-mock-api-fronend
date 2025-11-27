@@ -10,10 +10,16 @@ import AppLogo from '@/components/logo';
 import { useEffect, useState } from 'react';
 import { useAppContext } from '@/context/AppContext';
 import { useGotoSection } from '@/hooks/use-goto-section';
+import { useAppDispatch, useAppSelector } from '@/states/hooks';
+import { setErrorMsg } from '@/states/slice/app-slice';
+import { loadingAndErrorSelector } from '@/states/selector';
 
 export default function RegisterPage() {
+    const { loading, errorMsg } = useAppSelector(loadingAndErrorSelector);
+    const dispatch = useAppDispatch()
+
     const navigate = useNavigate()
-    const { handleRegister, errorMsg, loading, setErrorMsg } = useAuthContext()
+    const { handleRegister } = useAuthContext()
     const [errorToast, setErrorToast] = useState<boolean>(false)
     const { delayTimer } = useAppContext()
 
@@ -31,7 +37,7 @@ export default function RegisterPage() {
             setErrorToast(true)
             delayTimer(() => {
                 setErrorToast(false)
-                setErrorMsg('')
+                dispatch(setErrorMsg(''))
             }, 2500)
         }
     }, [errorMsg, errors.root?.message]);

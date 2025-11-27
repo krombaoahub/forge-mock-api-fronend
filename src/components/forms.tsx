@@ -1,10 +1,10 @@
-import type { FormInputProps, FormProps } from "@/interfaces";
+import type { FormInputInterface, FormInterface } from "@/interfaces";
 import { cn } from "@/libs/utils";
 import type React from "react";
 import { PasswordMeter } from "./password-meter";
 import uuid from "react-uuid";
 
-export const FormField: React.FC<FormProps> = ({ handleSubmit, inputs, className, children, ...props }) => {
+export const FormField: React.FC<FormInterface> = ({ handleSubmit, inputs, className, children, ...props }) => {
     return (
         <form onSubmit={handleSubmit} {...props} className={cn(`flex flex-col gap-6`, className)} >
             {inputs.map((input, key) => <FormInput key={key} {...input} />)}
@@ -13,7 +13,7 @@ export const FormField: React.FC<FormProps> = ({ handleSubmit, inputs, className
     )
 }
 
-export const FormInput: React.FC<FormInputProps> = ({ passwordMeter = false, className = '', register, errors, keyId = 'id-' + uuid().toString(), type = 'text', placeholder, label, field = '' }) => {
+export const FormInput: React.FC<FormInputInterface> = ({ passwordMeter = false, className = '', register, errors, keyId = 'id-' + uuid().toString(), type = 'text', placeholder, label, field = '' }) => {
     const hasError = errors ? errors[field] : false
     return (
         <div className="input-floating">

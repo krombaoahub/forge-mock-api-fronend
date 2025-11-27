@@ -5,17 +5,17 @@ import ThemeDropdown from "./theme-dropdown";
 import { useEffect, useRef, useState } from "react";
 import { useOutsideClickDetector } from "@/hooks/use-click-outside";
 import { HSAccordion } from "flyonui/flyonui";
-import type { HeaderProps } from "@/interfaces";
+import type { HeaderInterface } from "@/interfaces";
 import { useGotoSection } from "@/hooks/use-goto-section";
 import { UserDropdownMenu } from "./user-dropdown-menu";
-import { useAuthContext } from "@/context/AuthContext";
+import { useAppSelector } from "@/states/hooks";
 
 type HSAccordionType = HSAccordion | undefined;
 
-export default function Header({ dashboardHeader }: HeaderProps) {
-    const { currentUser } = useAuthContext();
+export default function Header({ dashboardHeader }: HeaderInterface) {
+    const currentUser = useAppSelector((state) => state.app.currentUser);
     const { pathname } = useLocation();
-    console.log('Current Pathname:', pathname, !['/login', '/register'].includes(pathname));
+    const formPage = ['/login', '/register'].includes(pathname)
     const [accordionHS, setAccordionHS] = useState<HSAccordionType>(undefined)
 
     const accordionRef = useRef(null);
@@ -46,7 +46,7 @@ export default function Header({ dashboardHeader }: HeaderProps) {
             {dashboardHeader ? <div className='mx-auto gap-5 justify-between items-center lg:flex  hidden'>
                 <div className='flex gap-5 items-center'>
                     <AppLogo /></div>
-                {!['/login', '/register'].includes(pathname) && <div className="flex gap-5 items-center">
+                {!formPage && <div className="flex gap-5 items-center">
                     <div onClick={() => handleGotoSection('featureRef')} className='link link-animated hover:text-base-content'>Features</div>
                     <div onClick={() => handleGotoSection('documentationRef')} className='link link-animated hover:text-base-content'>Documentation</div>
                     <div onClick={() => handleGotoSection('pricingRef')} className='link link-animated hover:text-base-content'>Pricing</div>
@@ -58,7 +58,7 @@ export default function Header({ dashboardHeader }: HeaderProps) {
                 <div className='mx-auto gap-5 justify-between items-center lg:flex  hidden'>
                     <AppLogo />
                     {
-                        !['/login', '/register'].includes(pathname) &&
+                        !formPage &&
                         <>
                             <div className='flex gap-5'>
                                 <div onClick={() => handleGotoSection('featureRef')} className='link link-animated hover:text-base-content'>Features</div>
@@ -104,7 +104,7 @@ export default function Header({ dashboardHeader }: HeaderProps) {
                                             <Link onClick={() => setTimeout(() => { handleGotoSection('loginRef') }, 100)} to={'/login'} className=' link link-animated hover:text-base-content'>Sign In</Link>
                                             <ThemeDropdown />
                                         </>
-                                        : <UserDropdownMenu mobile/>
+                                        : <UserDropdownMenu mobile />
                                 }
                             </div>
                         </div>

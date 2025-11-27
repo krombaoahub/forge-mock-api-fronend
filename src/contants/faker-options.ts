@@ -1,0 +1,814 @@
+export const fakerOptions = [
+    {
+        "group": "airline",
+        "type": "aircraftType"
+    },
+    {
+        "group": "airline",
+        "type": "airline"
+    },
+    {
+        "group": "airline",
+        "type": "airplane"
+    },
+    {
+        "group": "airline",
+        "type": "airport"
+    },
+    {
+        "group": "airline",
+        "type": "flightNumber"
+    },
+    {
+        "group": "airline",
+        "type": "recordLocator"
+    },
+    {
+        "group": "airline",
+        "type": "seat"
+    },
+    {
+        "group": "animal",
+        "type": "bear"
+    },
+    {
+        "group": "animal",
+        "type": "bird"
+    },
+    {
+        "group": "animal",
+        "type": "cat"
+    },
+    {
+        "group": "animal",
+        "type": "cetacean"
+    },
+    {
+        "group": "animal",
+        "type": "cow"
+    },
+    {
+        "group": "animal",
+        "type": "crocodilia"
+    },
+    {
+        "group": "animal",
+        "type": "dog"
+    },
+    {
+        "group": "animal",
+        "type": "fish"
+    },
+    {
+        "group": "animal",
+        "type": "horse"
+    },
+    {
+        "group": "animal",
+        "type": "insect"
+    },
+    {
+        "group": "animal",
+        "type": "lion"
+    },
+    {
+        "group": "animal",
+        "type": "petName"
+    },
+    {
+        "group": "animal",
+        "type": "rabbit"
+    },
+    {
+        "group": "animal",
+        "type": "rodent"
+    },
+    {
+        "group": "animal",
+        "type": "snake"
+    },
+    {
+        "group": "animal",
+        "type": "type"
+    },
+    {
+        "group": "book",
+        "type": "author"
+    },
+    {
+        "group": "book",
+        "type": "format"
+    },
+    {
+        "group": "book",
+        "type": "genre"
+    },
+    {
+        "group": "book",
+        "type": "publisher"
+    },
+    {
+        "group": "book",
+        "type": "series"
+    },
+    {
+        "group": "book",
+        "type": "title"
+    },
+    {
+        "group": "commerce",
+        "type": "department"
+    },
+    {
+        "group": "commerce",
+        "type": "isbn"
+    },
+    {
+        "group": "commerce",
+        "type": "price"
+    },
+    {
+        "group": "commerce",
+        "type": "product"
+    },
+    {
+        "group": "commerce",
+        "type": "productAdjective"
+    },
+    {
+        "group": "commerce",
+        "type": "productDescription"
+    },
+    {
+        "group": "commerce",
+        "type": "productMaterial"
+    },
+    {
+        "group": "commerce",
+        "type": "productName"
+    },
+    {
+        "group": "company",
+        "type": "buzzAdjective"
+    },
+    {
+        "group": "company",
+        "type": "buzzNoun"
+    },
+    {
+        "group": "company",
+        "type": "buzzPhrase"
+    },
+    {
+        "group": "company",
+        "type": "buzzVerb"
+    },
+    {
+        "group": "company",
+        "type": "catchPhrase"
+    },
+    {
+        "group": "company",
+        "type": "catchPhraseAdjective"
+    },
+    {
+        "group": "company",
+        "type": "catchPhraseDescriptor"
+    },
+    {
+        "group": "company",
+        "type": "catchPhraseNoun"
+    },
+    {
+        "group": "company",
+        "type": "name"
+    },
+    {
+        "group": "date",
+        "type": "anytime"
+    },
+    {
+        "group": "date",
+        "type": "between"
+    },
+    {
+        "group": "date",
+        "type": "betweens"
+    },
+    {
+        "group": "date",
+        "type": "birthdate"
+    },
+    {
+        "group": "date",
+        "type": "future"
+    },
+    {
+        "group": "date",
+        "type": "month"
+    },
+    {
+        "group": "date",
+        "type": "past"
+    },
+    {
+        "group": "date",
+        "type": "recent"
+    },
+    {
+        "group": "date",
+        "type": "soon"
+    },
+    {
+        "group": "date",
+        "type": "timeZone"
+    },
+    {
+        "group": "date",
+        "type": "weekday"
+    },
+    {
+        "group": "finance",
+        "type": "accountName"
+    },
+    {
+        "group": "finance",
+        "type": "accountNumber"
+    },
+    {
+        "group": "finance",
+        "type": "amount"
+    },
+    {
+        "group": "finance",
+        "type": "bic"
+    },
+    {
+        "group": "finance",
+        "type": "bitcoinAddress"
+    },
+    {
+        "group": "finance",
+        "type": "creditCardCVV"
+    },
+    {
+        "group": "finance",
+        "type": "creditCardIssuer"
+    },
+    {
+        "group": "finance",
+        "type": "creditCardNumber"
+    },
+    {
+        "group": "finance",
+        "type": "currency"
+    },
+    {
+        "group": "finance",
+        "type": "currencyCode"
+    },
+    {
+        "group": "finance",
+        "type": "currencyName"
+    },
+    {
+        "group": "finance",
+        "type": "currencyNumericCode"
+    },
+    {
+        "group": "finance",
+        "type": "currencySymbol"
+    },
+    {
+        "group": "finance",
+        "type": "ethereumAddress"
+    },
+    {
+        "group": "finance",
+        "type": "iban"
+    },
+    {
+        "group": "finance",
+        "type": "litecoinAddress"
+    },
+    {
+        "group": "finance",
+        "type": "pin"
+    },
+    {
+        "group": "finance",
+        "type": "routingNumber"
+    },
+    {
+        "group": "finance",
+        "type": "transactionDescription"
+    },
+    {
+        "group": "finance",
+        "type": "transactionType"
+    },
+    {
+        "group": "food",
+        "type": "adjective"
+    },
+    {
+        "group": "food",
+        "type": "description"
+    },
+    {
+        "group": "food",
+        "type": "dish"
+    },
+    {
+        "group": "food",
+        "type": "ethnicCategory"
+    },
+    {
+        "group": "food",
+        "type": "fruit"
+    },
+    {
+        "group": "food",
+        "type": "ingredient"
+    },
+    {
+        "group": "food",
+        "type": "meat"
+    },
+    {
+        "group": "food",
+        "type": "spice"
+    },
+    {
+        "group": "food",
+        "type": "vegetable"
+    },
+    {
+        "group": "image",
+        "type": "avatar"
+    },
+    {
+        "group": "image",
+        "type": "avatarGitHub"
+    },
+    {
+        "group": "image",
+        "type": "dataUri"
+    },
+    {
+        "group": "image",
+        "type": "personPortrait"
+    },
+    {
+        "group": "image",
+        "type": "url"
+    },
+    {
+        "group": "image",
+        "type": "urlLoremFlickr"
+    },
+    {
+        "group": "image",
+        "type": "urlPicsumPhotos"
+    },
+    {
+        "group": "location",
+        "type": "buildingNumber"
+    },
+    {
+        "group": "location",
+        "type": "cardinalDirection"
+    },
+    {
+        "group": "location",
+        "type": "city"
+    },
+    {
+        "group": "location",
+        "type": "continent"
+    },
+    {
+        "group": "location",
+        "type": "country"
+    },
+    {
+        "group": "location",
+        "type": "countryCode"
+    },
+    {
+        "group": "location",
+        "type": "county"
+    },
+    {
+        "group": "location",
+        "type": "direction"
+    },
+    {
+        "group": "location",
+        "type": "language"
+    },
+    {
+        "group": "location",
+        "type": "latitude"
+    },
+    {
+        "group": "location",
+        "type": "longitude"
+    },
+    {
+        "group": "location",
+        "type": "nearbyGPSCoordinate"
+    },
+    {
+        "group": "location",
+        "type": "ordinalDirection"
+    },
+    {
+        "group": "location",
+        "type": "secondaryAddress"
+    },
+    {
+        "group": "location",
+        "type": "state"
+    },
+    {
+        "group": "location",
+        "type": "street"
+    },
+    {
+        "group": "location",
+        "type": "streetAddress"
+    },
+    {
+        "group": "location",
+        "type": "timeZone"
+    },
+    {
+        "group": "location",
+        "type": "zipCode"
+    },
+    {
+        "group": "lorem",
+        "type": "lines"
+    },
+    {
+        "group": "lorem",
+        "type": "paragraph"
+    },
+    {
+        "group": "lorem",
+        "type": "paragraphs"
+    },
+    {
+        "group": "lorem",
+        "type": "sentence"
+    },
+    {
+        "group": "lorem",
+        "type": "sentences"
+    },
+    {
+        "group": "lorem",
+        "type": "slug"
+    },
+    {
+        "group": "lorem",
+        "type": "text"
+    },
+    {
+        "group": "lorem",
+        "type": "word"
+    },
+    {
+        "group": "lorem",
+        "type": "words"
+    },
+    {
+        "group": "music",
+        "type": "album"
+    },
+    {
+        "group": "music",
+        "type": "artist"
+    },
+    {
+        "group": "music",
+        "type": "genre"
+    },
+    {
+        "group": "music",
+        "type": "songName"
+    },
+    {
+        "group": "number",
+        "type": "bigInt"
+    },
+    {
+        "group": "number",
+        "type": "binary"
+    },
+    {
+        "group": "number",
+        "type": "float"
+    },
+    {
+        "group": "number",
+        "type": "hex"
+    },
+    {
+        "group": "number",
+        "type": "int"
+    },
+    {
+        "group": "number",
+        "type": "octal"
+    },
+    {
+        "group": "number",
+        "type": "romanNumeral"
+    },
+    {
+        "group": "person",
+        "type": "bio"
+    },
+    {
+        "group": "person",
+        "type": "firstName"
+    },
+    {
+        "group": "person",
+        "type": "fullName"
+    },
+    {
+        "group": "person",
+        "type": "gender"
+    },
+    {
+        "group": "person",
+        "type": "jobArea"
+    },
+    {
+        "group": "person",
+        "type": "jobDescriptor"
+    },
+    {
+        "group": "person",
+        "type": "jobTitle"
+    },
+    {
+        "group": "person",
+        "type": "jobType"
+    },
+    {
+        "group": "person",
+        "type": "lastName"
+    },
+    {
+        "group": "person",
+        "type": "middleName"
+    },
+    {
+        "group": "person",
+        "type": "prefix"
+    },
+    {
+        "group": "person",
+        "type": "sex"
+    },
+    {
+        "group": "person",
+        "type": "sexType"
+    },
+    {
+        "group": "person",
+        "type": "suffix"
+    },
+    {
+        "group": "person",
+        "type": "zodiacSign"
+    },
+    {
+        "group": "phone",
+        "type": "imei"
+    },
+    {
+        "group": "phone",
+        "type": "number"
+    },
+    {
+        "group": "science",
+        "type": "chemicalElement"
+    },
+    {
+        "group": "science",
+        "type": "unit"
+    },
+    {
+        "group": "string",
+        "type": "alpha"
+    },
+    {
+        "group": "string",
+        "type": "alphanumeric"
+    },
+    {
+        "group": "string",
+        "type": "binary"
+    },
+    {
+        "group": "string",
+        "type": "fromCharacters"
+    },
+    {
+        "group": "string",
+        "type": "hexadecimal"
+    },
+    {
+        "group": "string",
+        "type": "nanoid"
+    },
+    {
+        "group": "string",
+        "type": "numeric"
+    },
+    {
+        "group": "string",
+        "type": "octal"
+    },
+    {
+        "group": "string",
+        "type": "sample"
+    },
+    {
+        "group": "string",
+        "type": "symbol"
+    },
+    {
+        "group": "string",
+        "type": "ulid"
+    },
+    {
+        "group": "string",
+        "type": "uuid"
+    },
+    {
+        "group": "vehicle",
+        "type": "bicycle"
+    },
+    {
+        "group": "vehicle",
+        "type": "color"
+    },
+    {
+        "group": "vehicle",
+        "type": "fuel"
+    },
+    {
+        "group": "vehicle",
+        "type": "manufacturer"
+    },
+    {
+        "group": "vehicle",
+        "type": "model"
+    },
+    {
+        "group": "vehicle",
+        "type": "type"
+    },
+    {
+        "group": "vehicle",
+        "type": "vehicle"
+    },
+    {
+        "group": "vehicle",
+        "type": "vin"
+    },
+    {
+        "group": "vehicle",
+        "type": "vrm"
+    },
+    {
+        "group": "vehicle",
+        "type": "Word"
+    },
+    {
+        "group": "vehicle",
+        "type": "adjective"
+    },
+    {
+        "group": "vehicle",
+        "type": "adverb"
+    },
+    {
+        "group": "vehicle",
+        "type": "conjunction"
+    },
+    {
+        "group": "vehicle",
+        "type": "interjection"
+    },
+    {
+        "group": "vehicle",
+        "type": "noun"
+    },
+    {
+        "group": "vehicle",
+        "type": "preposition"
+    },
+    {
+        "group": "vehicle",
+        "type": "sample"
+    },
+    {
+        "group": "vehicle",
+        "type": "verb"
+    },
+    {
+        "group": "vehicle",
+        "type": "words"
+    },
+    {
+        "group": "internet",
+        "type": "displayName"
+    },
+    {
+        "group": "internet",
+        "type": "domainName"
+    },
+    {
+        "group": "internet",
+        "type": "domainSuffix"
+    },
+    {
+        "group": "internet",
+        "type": "domainWord"
+    },
+    {
+        "group": "internet",
+        "type": "email"
+    },
+    {
+        "group": "internet",
+        "type": "emoji"
+    },
+    {
+        "group": "internet",
+        "type": "exampleEmail"
+    },
+    {
+        "group": "internet",
+        "type": "httpMethod"
+    },
+    {
+        "group": "internet",
+        "type": "httpStatusCode"
+    },
+    {
+        "group": "internet",
+        "type": "ip"
+    },
+    {
+        "group": "internet",
+        "type": "ipv4"
+    },
+    {
+        "group": "internet",
+        "type": "ipv6"
+    },
+    {
+        "group": "internet",
+        "type": "jwt"
+    },
+    {
+        "group": "internet",
+        "type": "jwtAlgorithm"
+    },
+    {
+        "group": "internet",
+        "type": "mac"
+    },
+    {
+        "group": "internet",
+        "type": "password"
+    },
+    {
+        "group": "internet",
+        "type": "port"
+    },
+    {
+        "group": "internet",
+        "type": "protocol"
+    },
+    {
+        "group": "internet",
+        "type": "url"
+    },
+    {
+        "group": "internet",
+        "type": "userAgent"
+    },
+    {
+        "group": "internet",
+        "type": "username"
+    }
+]

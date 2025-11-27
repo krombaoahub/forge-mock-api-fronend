@@ -1,7 +1,7 @@
-import type { PasswordMeterProps } from "@/interfaces";
+import type { PasswordMeterInterface } from "@/interfaces";
 import type React from "react";
 
-export const PasswordMeter: React.FC<PasswordMeterProps> = ({ targetElement }) => {
+export const PasswordMeter: React.FC<PasswordMeterInterface> = ({ targetElement }) => {
     return (
         <div id={`${targetElement}-content`} className="card absolute z-10 w-full hidden p-4 shadow-lg">
             <div data-strong-password={`{

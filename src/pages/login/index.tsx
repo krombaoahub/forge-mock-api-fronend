@@ -10,11 +10,16 @@ import { useAuthContext } from '@/context/AuthContext';
 import AppLogo from '@/components/logo';
 import { useEffect, useState } from 'react';
 import { useAppContext } from '@/context/AppContext';
+import { useAppSelector } from '@/states/hooks';
+import { setErrorMsg } from '@/states/slice/app-slice';
+import { loadingAndErrorSelector } from '@/states/selector';
 
 export default function LoginPage() {
+    const { loading, errorMsg } = useAppSelector(loadingAndErrorSelector);
     const navigate = useNavigate()
+
     const [errorToast, setErrorToast] = useState<boolean>(false)
-    const { handleLogin, errorMsg, loading, setErrorMsg } = useAuthContext()
+    const { handleLogin } = useAuthContext()
     const { delayTimer } = useAppContext()
 
     const {

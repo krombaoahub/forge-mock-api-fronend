@@ -9,7 +9,7 @@ type FeaturesType = {
     include: boolean
     tooltip?: string
 }
-interface PriceCardProps {
+interface PriceCardInterface {
     type: string,
     price: string
     subText: string
@@ -18,7 +18,7 @@ interface PriceCardProps {
     features: FeaturesType[]
 
 }
-export const PriceCard: React.FC<PriceCardProps> = ({ mostPopular = false, ...props }) => {
+export const PriceCard: React.FC<PriceCardInterface> = ({ mostPopular = false, ...props }) => {
     return (
         <div className="grow relative hover:shadow-2xl hover:-translate-y-[15px] transition-all duration-300 hover:z-40 max-w-md">
             {mostPopular && <div className="btn btn-primary btn-sm absolute -top-4 z-50 left-1/2 transform -translate-x-1/2 px-5 rounded-full">Most Popular</div>}

@@ -1,15 +1,16 @@
 import { FormField } from "@/components/forms";
-import { useProjectContext } from "@/context/ProjectContext";
-import type { CreateProjectModalProps } from "@/interfaces";
+import type { CreateWorkspaceModalInterface } from "@/interfaces";
 import { getBySelector } from "@/libs/domUtils";
 import { destroyInitModal } from "@/libs/utils";
-import { createProjectFormSchema, type CreateProjectFormSchema } from "@/zod/schema";
+import { useAddWorkspaceMutation } from "@/services/api";
+import { isApiError } from "@/types";
+import { createWorkspaceFormSchema, type CreateWorkspaceFormFields } from "@/zod/schema";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 
-const CreateProjectModal: React.FC<CreateProjectModalProps> = ({ children, refId }) => {
-    const { loading, errorMsg, handleCreateProject, handleGetProject } = useProjectContext()
+const CreateWorkspaceModal: React.FC<CreateWorkspaceModalInterface> = ({ children, refId, refetch, dataCount }) => {
+    const [addWorkspace, { isLoading, error, isError }] = useAddWorkspaceMutation()
     const query = getBySelector(`#${refId}`, document)
 
     const {
@@ -17,8 +18,8 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({ children, refId
         handleSubmit,
         formState: { errors },
         reset
-    } = useForm<CreateProjectFormSchema>({
-        resolver: zodResolver(createProjectFormSchema),
+    } = useForm<CreateWorkspaceFormFields>({
+        resolver: zodResolver(createWorkspaceFormSchema),
     });
 
     useEffect(() => {
@@ -28,16 +29,27 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({ children, refId
         return () => reset(); // cleanup on unmount
     }, []);
 
-    const onCreateProject = async (data: any) => {
-        await handleCreateProject(data, () => {
-            if (query && !errorMsg) {
+    const onCreateWorkspace = async (data: any) => {
+        try {
+            await addWorkspace({
+                ...data
+            }).unwrap()
+
+            if (dataCount == 0) {
+                window.location.reload()
+            }
+            console.log({query})
+            if (query) {
                 setTimeout(() => {
-                    handleGetProject()
+                    refetch()
                 }, 100);
                 destroyInitModal(query)
                 reset()
             }
-        })
+
+        } catch (err) {
+            console.error('Failed to save the workspace:', err);
+        }
     }
 
     return (
@@ -50,16 +62,16 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({ children, refId
                 <div className="modal-dialog">
                     <div className="modal-content">
                         <div className="modal-header">
-                            <h3 className="modal-title">New Project</h3>
+                            <h3 className="modal-title">New Workspace</h3>
                             <button type="button" className="btn btn-text btn-circle btn-sm absolute end-3 top-3" aria-label="Close" data-overlay={`#${refId}`}><span className="icon-[tabler--x] size-4"></span></button>
                         </div>
-                        <div className={`${errors.root?.message || errorMsg ? 'rounded border p-5 alert-error alert-soft w-full alert' : 'hidden'}`}>
+                        <div className={`${errors.root?.message || isError ? 'rounded border p-5 alert-error alert-soft w-full alert' : 'hidden'}`}>
                             {errors.root?.message && (
                                 <small className="font-medium">{errors.root.message}</small>
                             )}
-                            {errorMsg && <small className='text-red-500'>{errorMsg}</small>}
+                            {isApiError(error) && <small className='text-red-500'>An error occurred: {error.status} {JSON.stringify(error.data)}</small>}
                         </div>
-                        <FormField handleSubmit={handleSubmit((data) => onCreateProject(data))} className='w-full p-6 pt-0' inputs={[{
+                        <FormField handleSubmit={handleSubmit((data) => onCreateWorkspace(data))} className='w-full p-6 pt-0' inputs={[{
                             className: 'border-0 border-b-1 rounded-none rounded-t',
                             register,
                             placeholder: 'Example: App, Project, Todo, etc...',
@@ -69,8 +81,8 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({ children, refId
                         }]} >
                             <div className="flex justify-end gap-4 w-full">
                                 <button type="button" className="btn btn-soft btn-secondary" data-overlay={`#${refId}`}>Cancel</button>
-                                <button type="submit" className={`btn btn-primary ${loading ? 'btn-disabled' : ''}`}>
-                                    {loading && <span className="loading loading-spinner"></span>}
+                                <button type="submit" className={`btn btn-primary ${isLoading ? 'btn-disabled' : ''}`}>
+                                    {isLoading && <span className="loading loading-spinner"></span>}
                                     Create
                                 </button>
                             </div>
@@ -81,4 +93,4 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({ children, refId
         </div>)
 }
 
-export default CreateProjectModal;
+export default CreateWorkspaceModal;

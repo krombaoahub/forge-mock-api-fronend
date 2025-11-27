@@ -1,6 +1,6 @@
 import type { IdTokenResult, UserInfo, UserMetadata } from "firebase/auth";
 
-export interface UserImplProps {
+export interface UserImplInterface {
     emailVerified: boolean;
     isAnonymous: boolean;
     metadata: UserMetadata;

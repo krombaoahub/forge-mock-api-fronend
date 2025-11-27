@@ -25,7 +25,7 @@ export default function Footer() {
                 </div>
             </div>
             <div className='border-t border-zinc-700/50 py-6 flex flex-wrap  gap-3 justify-between'>
-                <p className='text-secondary'>© 2024 ForgeMockAPI All rights reserved.</p>
+                <p className='text-secondary'>© 2025 ForgeMockAPI All rights reserved.</p>
                 <p className='text-secondary'>Status: All systems operational</p>
             </div>
         </div>

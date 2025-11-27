@@ -2,14 +2,14 @@ import { useEffect } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth, db } from '../firebase';
 import { doc, getDoc } from 'firebase/firestore';
-import type { UserImplProps } from '@/interfaces/firebaseAuth';
+import type { UserImplInterface } from '@/interfaces/firebaseAuth';
 
-interface useOnAuthStateChangedProps {
-    setCurrentUser: (e: UserImplProps | null) => void
+interface UseOnAuthStateChangedInterface {
+    setCurrentUser: (e: UserImplInterface | null) => void
     setAuthLoading: (e: boolean) => void
 }
 
-export function useOnAuthStateChanged({ setCurrentUser, setAuthLoading }: useOnAuthStateChangedProps) {
+export function useOnAuthStateChanged({ setCurrentUser, setAuthLoading }: UseOnAuthStateChangedInterface) {
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (user: any) => {
 
@@ -20,6 +20,9 @@ export function useOnAuthStateChanged({ setCurrentUser, setAuthLoading }: useOnA
                 if (userDocSnap.exists()) {
 
                     const userDataFromFirestore = userDocSnap.data();
+                    
+                    userDataFromFirestore.createdAt = userDataFromFirestore.createdAt?.toMillis() || null;
+                    userDataFromFirestore.uid = userDataFromFirestore.ui?.toMillis() || null;
 
                     const fullUserProfile = {
                         ...user.reloadUserInfo,

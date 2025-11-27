@@ -5,7 +5,8 @@ import { AppRoutes } from './routes';
 import { useEffect } from 'react';
 import { initializeTheme } from './hooks/use-appearance';
 import { useLocation } from 'react-router-dom';
-import { useAuthContext } from './context/AuthContext';
+import { useAppDispatch } from './states/hooks';
+import { setErrorMsg } from './states/slice/app-slice';
 
 // window.$ = $;
 // window.jQuery = $;
@@ -13,13 +14,13 @@ window._ = _;
 
 function App() {
   const { pathname } = useLocation();
-  const { setErrorMsg } = useAuthContext()
+  const dispatch = useAppDispatch()
   useFlyOnUI()
 
   initializeTheme();
 
   useEffect(() => {
-    setErrorMsg('')
+    dispatch(setErrorMsg(''))
   }, [pathname]);
 
   return (<div>

@@ -1,13 +1,15 @@
 import { useAuthContext } from "@/context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import ThemeDropdown from "./theme-dropdown";
+import { useAppSelector } from "@/states/hooks";
 
-interface UserAvatarProps {
+interface UserAvatarInterface {
     displayInfo?: boolean
 }
 
-export function UserAvatar({ displayInfo }: UserAvatarProps) {
-    const { currentUser } = useAuthContext();
+export function UserAvatar({ displayInfo }: UserAvatarInterface) {
+    const currentUser = useAppSelector((state) => state.app.currentUser);
+    // const { currentUser } = useAuthContext();
     const { email, displayName } = currentUser;
     return (
         <div className="flex gap-2 items-center">
@@ -28,7 +30,8 @@ export function UserAvatar({ displayInfo }: UserAvatarProps) {
     )
 }
 export function UserDropdownMenu({ mobile }: { mobile?: boolean }) {
-    const { handleLogout, loading } = useAuthContext();
+    const loading = useAppSelector((state) => state.app.loading);
+    const { handleLogout } = useAuthContext();
     const navigate = useNavigate();
 
     return (

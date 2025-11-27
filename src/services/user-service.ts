@@ -1,9 +1,9 @@
 import { db } from "@/firebase";
-import type { SaveUserProfileProps } from "@/interfaces";
+import type { SaveUserProfileInterface } from "@/interfaces";
 import { timestamp } from "@/libs/utils";
 import { doc, setDoc } from "firebase/firestore";
 
-export async function saveUserProfile(uid: string, userData: SaveUserProfileProps) {
+export async function saveUserProfile(uid: string, userData: SaveUserProfileInterface) {
     const userRef = doc(db, "users", uid);
     
     return await setDoc(userRef, {

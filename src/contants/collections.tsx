@@ -1,2 +1,5 @@
-export const users = 'users'
+export const USERS = 'users'
 export const PROJECTS = 'projects'
+export const WORKSPACE = 'workspace'
+export const COLLECTIONS = 'collections'
+export const ENDPOINTS = 'endpoints'
