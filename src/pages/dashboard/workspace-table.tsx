@@ -1,7 +1,6 @@
 import { WORKSPACE_ROUTE } from "@/contants/route"
 import { getByAttribute, getBySelector } from "@/libs/domUtils"
 import { TableFillMissingPage, TablePageInfo, TablePaginate, TableSearch } from "@/libs/table"
-import { useDeleteWorkspaceMutation } from "@/services/api"
 import type { DocumentData } from "firebase/firestore"
 import { HSDropdown } from "flyonui/flyonui"
 import { Plus, Trash } from "lucide-react"
@@ -10,16 +9,12 @@ import { useNavigate } from "react-router-dom"
 
 interface UserWorkspaceTableInterface {
     data: DocumentData[]
-    refetch: () => void
-    isLoading: boolean
 }
 
-const UserWorkspaceTable: React.FC<UserWorkspaceTableInterface> = ({ data, refetch }) => {
+const UserWorkspaceTable: React.FC<UserWorkspaceTableInterface> = ({ data }) => {
     const maxVisibleButtons = 3;
     const itemsPerPage = 10; // Number of items to display per page    
     const navigate = useNavigate()
-
-    const [deleteWorkspace, { isLoading: deleteLoading }] = useDeleteWorkspaceMutation()
 
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [itemLength, setItemLength] = useState<number>(data.length);
@@ -29,16 +24,6 @@ const UserWorkspaceTable: React.FC<UserWorkspaceTableInterface> = ({ data, refet
     const searchRef = useRef<HTMLInputElement>(null);
 
     const totalPages = useMemo(() => Math.ceil(itemLength / itemsPerPage), [itemLength]);
-
-    const onDelete = useCallback(async (item: DocumentData) => {
-        console.log(item)
-        await deleteWorkspace(item).unwrap()
-        // deleteWorkspace(item.uid)
-        //     .then(isDeleted => {
-        //         isDeleted && handleGetWorkspace()
-        //     })
-        refetch()
-    }, [])
 
     useEffect(() => {
         setItemLength(data.length)
@@ -80,8 +65,8 @@ const UserWorkspaceTable: React.FC<UserWorkspaceTableInterface> = ({ data, refet
         const modalBtn = getByAttribute('data-modal-btn', '#delete-workspace', document)
         const workspaceName = getBySelector('#delete-workspace span#workspace_name') as HTMLSpanElement
         const workspaceId = getBySelector('#delete-workspace input#workspace_id') as HTMLInputElement
-        if(workspaceName) workspaceName.innerHTML = `'${item.name}'`
-        if(workspaceId) workspaceId.value = item.id
+        if (workspaceName) workspaceName.innerHTML = `'${item.name}'`
+        if (workspaceId) workspaceId.value = item.id
         modalBtn && modalBtn.click()
     }
 

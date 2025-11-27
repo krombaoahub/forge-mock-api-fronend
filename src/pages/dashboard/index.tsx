@@ -42,7 +42,7 @@ export function Dashboard() {
                 <CreateWorkspaceModal refetch={refetch} dataCount={data ? data.length : 0} refId="create-workspace" className="hidden" />
                 {isLoading ? <UserWorkspaceTableSkeleton /> :
                     <>
-                        {!isError ? <UserWorkspaceTable refetch={refetch} data={data} isLoading={isLoading} />
+                        {!isError ? <UserWorkspaceTable data={data} />
                             : <div className="flex flex-col gap-4 justify-center min-h-[80dvh] items-center">
                                 <p className="font-medium text-sm flex gap-2 items-center"><Search size={15} />No workspaces yet...</p>
                                 <AppLogo logoOnly logoSize={70} className="[&>div]:size-60 [&>div]:btn [&>div]:btn-secondary [&>div]:bg-secondary/20 [&>div]:border-0 [&>div]:shadow-none [&>div]:rounded-full" />

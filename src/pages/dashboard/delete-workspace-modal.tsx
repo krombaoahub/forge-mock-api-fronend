@@ -4,7 +4,7 @@ import { destroyInitModal } from "@/libs/utils";
 import { useDeleteWorkspaceMutation } from "@/services/api";
 import { useEffect } from "react";
 
-const DeleteWorkspaceModal: React.FC<DeleteWorkspaceModalInterface> = ({ children, refId, refetch, dataCount, id }) => {
+const DeleteWorkspaceModal: React.FC<DeleteWorkspaceModalInterface> = ({ children, refId, refetch, dataCount }) => {
     const query = getBySelector(`#${refId}`, document)
 
     const [deleteWorkspace, { isLoading: deleteLoading }] = useDeleteWorkspaceMutation()
