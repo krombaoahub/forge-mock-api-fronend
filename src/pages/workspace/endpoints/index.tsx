@@ -239,7 +239,7 @@ const EndpointFields: React.FC = () => {
                         </div>
                         <div className="flex flex-col">
                             {
-                                responseFields.map((item: { input?: string, select?: string }, i: number) => (
+                                responseFields.map((_: { input?: string, select?: string }, i: number) => (
                                     <div className="my-2 flex w-full md:flex-nowrap flex-wrap gap-4 relative group" key={i}>
                                         <InputFloating indexKey={i} />
                                         <SelectFloating selectOptions={selectFields} />
