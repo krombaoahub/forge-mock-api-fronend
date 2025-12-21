@@ -84,7 +84,7 @@ interface PageInfoInterface {
     currentPage: number, itemLength: number, itemsPerPage: number
 }
 export function TablePageInfo({ currentPage, itemLength, itemsPerPage }: PageInfoInterface) {
-    let start = (((currentPage - 1) * itemsPerPage) + 1);
+    const start = (((currentPage - 1) * itemsPerPage) + 1);
     let end = currentPage * (itemLength < itemsPerPage ? itemLength : itemsPerPage);
     if (end > itemLength) end = itemLength;
 

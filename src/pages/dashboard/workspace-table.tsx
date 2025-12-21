@@ -13,7 +13,7 @@ interface UserWorkspaceTableInterface {
 
 const UserWorkspaceTable: React.FC<UserWorkspaceTableInterface> = ({ data }) => {
     const maxVisibleButtons = 3;
-    const itemsPerPage = 10; // Number of items to display per page    
+    const itemsPerPage = 10; // Number of items to display per page  
     const navigate = useNavigate()
 
     const [currentPage, setCurrentPage] = useState<number>(1);
@@ -37,7 +37,7 @@ const UserWorkspaceTable: React.FC<UserWorkspaceTableInterface> = ({ data }) => 
     }, [])
 
     useEffect(() => {
-        let startPage = Math.max(1, currentPage - Math.floor(maxVisibleButtons / 2));
+        const startPage = Math.max(1, currentPage - Math.floor(maxVisibleButtons / 2));
         let endPage = Math.min(totalPages, startPage + maxVisibleButtons - 1);
 
         if (totalPages < endPage) { endPage = totalPages }
@@ -46,7 +46,7 @@ const UserWorkspaceTable: React.FC<UserWorkspaceTableInterface> = ({ data }) => 
 
     const fillMissingPage = useCallback((start: number, end: number) => {
         return TableFillMissingPage(start, end)
-    }, [buttonPages])
+    }, [])
 
     const paginate = useCallback((pageNumber: number = 1) => {
         TablePaginate({ itemsPerPage, pageNumber, searchRef, data, setCurrentPage, setItemLength, setItemsToDisplay })
@@ -54,32 +54,36 @@ const UserWorkspaceTable: React.FC<UserWorkspaceTableInterface> = ({ data }) => 
 
     const search = useCallback((e: BaseSyntheticEvent) => {
         TableSearch({ e, itemsPerPage, data, setCurrentPage, setItemsToDisplay, setItemLength })
-    }, [searchRef.current?.value]);
+    }, [data]);
 
     const pageInfo = useCallback(() => {
         return TablePageInfo({ currentPage, itemLength, itemsPerPage })
-    }, [currentPage, searchRef.current?.value])
+    }, [currentPage, itemLength, itemsPerPage])
 
 
     const onDeleteWorkspaceModal = (item: DocumentData) => {
-        const modalBtn = getByAttribute('data-modal-btn', '#delete-workspace', document)
-        const workspaceName = getBySelector('#delete-workspace span#workspace_name') as HTMLSpanElement
-        const workspaceId = getBySelector('#delete-workspace input#workspace_id') as HTMLInputElement
+        const modalBtn = getByAttribute('data-modal-btn', '#delete-workspace-modal', document)
+        const workspaceName = getBySelector('#delete-workspace-modal span#workspace_name') as HTMLSpanElement
+        const workspaceId = getBySelector('#delete-workspace-modal input#workspace_id') as HTMLInputElement
         if (workspaceName) workspaceName.innerHTML = `'${item.name}'`
         if (workspaceId) workspaceId.value = item.id
-        modalBtn && modalBtn.click()
+        if (modalBtn) modalBtn.click()
     }
 
     const onCreateWorkspaceModal = () => {
         const modalBtn = getByAttribute('data-modal-btn', '#create-workspace', document)
-        modalBtn && modalBtn.click()
+        if (modalBtn) modalBtn.click()
+    }
+
+    const onWorkspaceSelect = (workspaceId: string) => {
+        navigate(`${WORKSPACE_ROUTE}${workspaceId}`)
     }
 
     return (
         <>
             {<div className="w-full overflow-x-auto ">
                 <table className="table bg-secondary/5 rounded-md p-6">
-                    <caption className="flex  justify-between border-b border-secondary/20 text-base-content p-5 text-left text-lg font-semibold rtl:text-right">
+                    <caption className="flex flex-wrap  justify-between border-b border-secondary/20 text-base-content p-5 text-left text-lg font-semibold rtl:text-right">
                         <div className="flex gap-2 items-center">
                             <span>Workspaces</span>
                             <div onClick={onCreateWorkspaceModal}>
@@ -102,7 +106,7 @@ const UserWorkspaceTable: React.FC<UserWorkspaceTableInterface> = ({ data }) => 
                             itemsToDisplay && itemsToDisplay.map((item: DocumentData, key: number) => (
                                 <tr className="cursor-pointer row-hover" key={key}>
                                     <td className="flex justify-between items-center">
-                                        <div className="size-full p-1" onClick={() => navigate(`${WORKSPACE_ROUTE}${item.id}`)}>{item.name}</div>
+                                        <div className="size-full p-1" onClick={() => onWorkspaceSelect(item.id)}>{item.name}</div>
                                         <div>
                                             <div className="dropdown relative inline-flex">
                                                 <button id="dropdown-avatar" type="button" className="p-0 border-0 dropdown-toggle flex items-center gap-2 rounded-full" aria-haspopup="menu" aria-expanded="false" aria-label="Dropdown">
@@ -130,7 +134,7 @@ const UserWorkspaceTable: React.FC<UserWorkspaceTableInterface> = ({ data }) => 
                         </button>}
                         {
                             totalPages > 1 && fillMissingPage(buttonPages.startPage, buttonPages.endPage).map((page: number, key: number) => {
-                                let pageNumber = Number(page);
+                                const pageNumber = Number(page)
                                 return (
                                     <div key={key}>
                                         <button onClick={() => paginate(pageNumber)} type="button" className={`btn btn-soft join-item btn-square ${currentPage == pageNumber ? 'text-bg-primary' : ''}`}>{pageNumber}</button>

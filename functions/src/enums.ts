@@ -1,4 +1,4 @@
-export enum HttpStatusCode {
+export enum HttpStatusCodeEnum {
   OK = 200,
   CREATED = 201,
   NO_CONTENT = 204,
@@ -8,4 +8,12 @@ export enum HttpStatusCode {
   NOT_FOUND = 404,
   INTERNAL_SERVER_ERROR = 500,
   SERVICE_UNAVAILABLE = 503,
+}
+
+export enum CollectionsEnum {
+  PROJECTS = "projects",
+  USERS = "users",
+  WORKSPACE = "workspace",
+  COLLECTIONS = "collections",
+  DATA = "data",
 }

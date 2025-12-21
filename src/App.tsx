@@ -1,6 +1,6 @@
 // import $ from 'jquery';
 import _ from 'lodash';
-import { useFlyOnUI } from './hooks/use-init-flyoui';
+import { reInitFlyonUi, useFlyOnUI } from './hooks/use-init-flyoui';
 import { AppRoutes } from './routes';
 import { useEffect } from 'react';
 import { initializeTheme } from './hooks/use-appearance';
@@ -21,7 +21,8 @@ function App() {
 
   useEffect(() => {
     dispatch(setErrorMsg(''))
-  }, [pathname]);
+    reInitFlyonUi()
+  }, [pathname, dispatch]);
 
   return (<div>
     <AppRoutes />

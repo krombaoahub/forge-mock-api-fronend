@@ -1,18 +1,34 @@
-import { useForm } from 'react-hook-form';
+import { useForm, type FieldError } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { loginFormSchema, type LoginFormFields } from '@/zod/schema';
 import AuthLayout from '@/layouts/auth-layout';
 import '@/App.css'
-import { FormField } from '@/components/forms';
 import { Link, useNavigate } from 'react-router-dom';
 import { LoginWithGoogle } from '@/components/login-with-button';
-import { useAuthContext } from '@/context/AuthContext';
+import { useAuthContext } from '@/context';
 import AppLogo from '@/components/logo';
 import { useEffect, useState } from 'react';
-import { useAppContext } from '@/context/AppContext';
+import { useAppContext } from '@/context';
 import { useAppSelector } from '@/states/hooks';
 import { setErrorMsg } from '@/states/slice/app-slice';
 import { loadingAndErrorSelector } from '@/states/selector';
+import type { InputFormInterface, TInputTypes } from '@/interfaces';
+
+interface LoginForm extends InputFormInterface {
+    field: keyof LoginFormFields
+}
+
+const inputFields = [{
+    placeholder: 'example@domain.com',
+    type: 'text' as TInputTypes,
+    field: 'email' as keyof LoginFormFields,
+    label: 'Email'
+}, {
+    placeholder: '********',
+    type: 'password' as TInputTypes,
+    field: 'password' as keyof LoginFormFields,
+    label: 'Password',
+}]
 
 export default function LoginPage() {
     const { loading, errorMsg } = useAppSelector(loadingAndErrorSelector);
@@ -39,11 +55,11 @@ export default function LoginPage() {
                 setErrorMsg('')
             }, 2500)
         }
-    }, [errorMsg, errors.root?.message]);
+    }, [errorMsg, errors.root?.message, delayTimer]);
 
     useEffect(() => {
         return () => reset(); // cleanup on unmount
-    }, []);
+    }, [reset]);
 
     return (
         <section id="loginRef">
@@ -63,7 +79,29 @@ export default function LoginPage() {
                                     {errorMsg && <small className='text-red-500'>{errorMsg}</small>}
                                 </div>
 
-                                <FormField handleSubmit={handleSubmit((data) => handleLogin(data, navigate))} className='w-full' inputs={[{
+                                <form onSubmit={handleSubmit((data) => handleLogin(data, navigate))} className={`flex flex-col gap-6 w-full p-6 pt-0`} >
+                                    {inputFields.map((input: LoginForm, key: number) => {
+                                        const { field, placeholder, label, type } = input
+                                        const fieldError = errors[field] as FieldError | undefined;
+                                        const keyId = 'id-' + key
+                                        return (
+                                            <div className="input-floating" key={key}>
+                                                <input type={type} placeholder={placeholder} id={keyId}
+                                                    {...register(field)}
+                                                    className={`input border-0 border-b rounded-none rounded-t`} />
+                                                <label htmlFor={keyId} className="input-floating-label" >{label}</label>
+                                                {fieldError && fieldError.message && (<div className="text-sm mt-2 text-red-400 text-left">{fieldError.message}</div>)}
+                                            </div>
+                                        )
+                                    })}
+                                    <div className="flex justify-center w-full">
+                                        <button type="submit" className={`w-full btn btn-primary ${loading ? 'btn-disabled' : ''}`}>
+                                            {loading && <span className="loading loading-spinner"></span>}
+                                            Login
+                                        </button>
+                                    </div>
+                                </form>
+                                {/* <FormField handleSubmit={handleSubmit((data) => handleLogin(data, navigate))} className='w-full' inputs={[{
                                     className: 'border-0 border-b-1 rounded-none rounded-t',
                                     register,
                                     placeholder: 'example@domain.com',
@@ -86,7 +124,7 @@ export default function LoginPage() {
                                             Login
                                         </button>
                                     </div>
-                                </FormField>
+                                </FormField> */}
 
                                 <div className="divider">OR</div>
 

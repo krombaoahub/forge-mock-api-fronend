@@ -1,6 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit'
 import workspaceReducer from '@/states/slice/workspace-slice'
 import collectionReducer from '@/states/slice/collection-slice'
+import endpointReducer from '@/states/slice/endpoint-slice'
 import appReducer from '@/states/slice/app-slice'
 import { setupListeners } from '@reduxjs/toolkit/query'
 import { workspaceApi } from '@/services/api'
@@ -10,6 +11,7 @@ export const store = configureStore({
     app: appReducer,
     workspace: workspaceReducer,
     collection: collectionReducer,
+    endpoint: endpointReducer,
     // api
     [workspaceApi.reducerPath]: workspaceApi.reducer,
 

@@ -57,3 +57,9 @@ export type RegisterFormFields = z.infer<typeof registerFormSchema>;
 export type LoginFormFields = z.infer<typeof loginFormSchema>;
 export type CreateWorkspaceFormFields = z.infer<typeof createWorkspaceFormSchema>;
 export type CollectionFormFields = z.infer<typeof collectionFormSchema>;
+
+export type FormSchemaFields = z.infer<typeof loginFormSchema>
+    | z.infer<typeof registerFormSchema>
+    | z.infer<typeof collectionFormSchema>
+    | z.infer<typeof createWorkspaceFormSchema>;
+    

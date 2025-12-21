@@ -3,7 +3,7 @@ import type { StateSelectorInterface } from "@/interfaces";
 import { createSelector } from "@reduxjs/toolkit";
 
 const idT = (state: StateSelectorInterface) => state.collection.id
-const schemeFieldsT = (state: StateSelectorInterface) => state.collection.schemeFields
+const schemaFieldsT = (state: StateSelectorInterface) => state.collection.schemaFields
 const nameT = (state: StateSelectorInterface) => state.collection.name
 const dataCountT = (state: StateSelectorInterface) => state.collection.dataCount
 const maxFieldCountT = (state: StateSelectorInterface) => state.collection.maxFieldCount
@@ -12,7 +12,7 @@ const loadingT = (state: StateSelectorInterface) => state.collection.loading
 
 export const collectionSelector = createSelector([
     idT,
-    schemeFieldsT,
+    schemaFieldsT,
     nameT,
     dataCountT,
     maxFieldCountT,
@@ -20,7 +20,7 @@ export const collectionSelector = createSelector([
     loadingT
 ], (
     id,
-    schemeFields,
+    schemaFields,
     name,
     dataCount,
     maxFieldCount,
@@ -29,7 +29,7 @@ export const collectionSelector = createSelector([
 ) => {
     return {
         id,
-        schemeFields,
+        schemaFields,
         name,
         dataCount,
         maxFieldCount,

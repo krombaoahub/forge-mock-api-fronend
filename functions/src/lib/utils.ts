@@ -1,6 +1,7 @@
-import { faker } from '@faker-js/faker';
 import { type DocumentData } from 'firebase/firestore';
 import { admin } from '../imports';
+import { WriteBatch } from 'firebase-admin/firestore';
+import { FakeDataType, getFakeData } from './faker-utls';
 
 export const isEmpty = (obj: object | undefined) => {
   if (!obj) return
@@ -10,7 +11,7 @@ export const isEmpty = (obj: object | undefined) => {
 // collection data timestamp
 export const timestamp = {
   createdAt: admin.firestore.FieldValue.serverTimestamp(),
-  updatedAt: null,
+  updatedAt: admin.firestore.FieldValue.serverTimestamp(),
   deletedAt: null,
 }
 
@@ -22,23 +23,32 @@ export const timestampToMillis = (e: DocumentData) => {
   }
 }
 
+export const timestampToDate = (e: DocumentData) => {
+  return {
+    createdAt: e.data().createdAt?.toDate(),
+    updatedAt: e.data().updatedAt?.toDate(),
+    deletedAt: e.data().deletedAt?.toDate(),
+  }
+}
+
 export function capitalizeFirstLetter(string: string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-export function generateFakeData(schemes: { name: string, type: string }[], count: number): any[] {
-  const generatedData: any[] = [];
+export function generateFakeData(schemas: { name: string, type: string }[], count: number): DocumentData[] {
+  const generatedData: DocumentData[] = [];
   const array = [...Array(count)]
   array.map(() => {
-    let data: Record<string, any> = {}
-    schemes.forEach(scheme => {
-      const [base, fakeData] = scheme.type.split('.')
-      const tempFakeData = (faker as any)[base][fakeData]()
-      if (scheme.name != '') {
+    const data: DocumentData = {}
+    schemas.forEach(schema => {
+      const [module, field] = schema.type.split('.')
+
+      const tempFakeData = getFakeData(module, field)
+      if (schema.name != '') {
         if (typeof tempFakeData == 'object') {
-          data[scheme.name] = JSON.stringify((faker as any)[base][fakeData]())
+          data[schema.name] = getFakeData(module, field) as FakeDataType
         } else {
-          data[scheme.name] = (faker as any)[base][fakeData]()
+          data[schema.name] = getFakeData(module, field) as FakeDataType
         }
       }
     });
@@ -51,7 +61,7 @@ export function generateFakeData(schemes: { name: string, type: string }[], coun
   return generatedData
 }
 
-export async function batchCommit(batch: any) {
+export async function batchCommit(batch: WriteBatch) {
   try {
     await batch.commit();
     console.log("Documents successfully written in a batch!");
@@ -78,3 +88,14 @@ export function decryptWithSalt(encodedData: string, salt: string) {
   }
 }
 
+export function utf8ToBase64(str: string): string {
+    // 1. Encode the string into UTF-8 using encodeURIComponent.
+    // 2. Escape certain characters that get mistranslated by unescape (like '%')
+    const utf8Bytes = encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function(match, p1) {
+        // Convert URI escapes into their corresponding character codes
+        return String.fromCharCode(parseInt(p1, 16));
+    });
+
+    // 3. Use the browser's native btoa function on the safe Latin1 string
+    return btoa(utf8Bytes);
+}

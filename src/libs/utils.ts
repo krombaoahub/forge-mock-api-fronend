@@ -1,9 +1,11 @@
-import { faker } from '@faker-js/faker';
 import { clsx, type ClassValue } from 'clsx';
-import { serverTimestamp, type DocumentData } from 'firebase/firestore';
+import { serverTimestamp, WriteBatch, type DocumentData } from 'firebase/firestore';
 import { HSOverlay, HSSelect, type ICollectionItem } from 'flyonui/flyonui';
 import { twMerge } from 'tailwind-merge';
 import { getAllByAttribute } from './domUtils';
+import type { DataFieldValue, NameTypeInterface } from '@/interfaces';
+import type { CollectionFormFields } from '@/zod/schema';
+import { getFakeData } from './faker-utils';
 
 export const isEmpty = (obj: object | undefined) => {
   if (!obj) return
@@ -30,6 +32,7 @@ export function destroyInitModal(query: HTMLElement) {
     if (query) {
       const { element } = HSOverlay.getInstance(query, true) as ICollectionItem<HSOverlay>
       element.destroy()
+      HSOverlay.autoInit()
     }
   }, 100);
 }
@@ -53,19 +56,20 @@ export function capitalizeFirstLetter(string: string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-export function generateFakeData(schemes: { name: string, type: string }[], count: number): any[] {
-  const generatedData: any[] = [];
+export function generateFakeData(schemas: NameTypeInterface[], count: number): DocumentData[] {
+  const generatedData: DocumentData[] = [];
   const array = [...Array(count)]
   array.map(() => {
-    let data: Record<string, any> = {}
-    schemes.forEach(scheme => {
-      const [base, fakeData] = scheme.type.split('.')
-      const tempFakeData = (faker as any)[base][fakeData]()
-      if (scheme.name != '') {
+    const data: DocumentData = {}
+    schemas.forEach(schema => {
+      const [module, field] = schema.type.split('.')
+
+      const tempFakeData = getFakeData(module, field)
+      if (schema.name != '') {
         if (typeof tempFakeData == 'object') {
-          data[scheme.name] = JSON.stringify((faker as any)[base][fakeData]())
+          data[schema.name] = JSON.stringify(getFakeData(module, field))
         } else {
-          data[scheme.name] = (faker as any)[base][fakeData]()
+          data[schema.name] = getFakeData(module, field)
         }
       }
     });
@@ -78,7 +82,7 @@ export function generateFakeData(schemes: { name: string, type: string }[], coun
   return generatedData
 }
 
-export async function batchCommit(batch: any) {
+export async function batchCommit(batch: WriteBatch) {
   try {
     await batch.commit();
     console.log("Documents successfully written in a batch!");
@@ -87,20 +91,24 @@ export async function batchCommit(batch: any) {
   }
 }
 
-export function destroyHSSelect(name: string) {
+export function destroyInputHSSelect(name: string) {
   const options = getAllByAttribute('name', name)
 
-  Array.from(options).map((el: any) => {
+  Array.from(options).map((el: HTMLElement) => {
     const selectEl = HSSelect.getInstance(el)
     if (selectEl && 'destroy' in selectEl) {
       selectEl.destroy()
     }
   })
+  
+  setTimeout(() => {
+      HSSelect.autoInit()
+  }, 10);
 }
 
-export function buildFieldScheme(data: any, excludeKey: any[]) {
-  let fields: { name: string, type: string }[] = []
-  Object.entries(data).map((item: any) => {
+export function buildFieldSchema(data: CollectionFormFields, excludeKey: string[]) {
+  const fields: NameTypeInterface[] = []
+  Object.entries(data).map((item: string[]) => {
     const [key, value] = item
     const [type, num] = key.split('_')
 
@@ -121,9 +129,9 @@ export function buildFieldScheme(data: any, excludeKey: any[]) {
   return fields
 }
 
-export function parseFieldScheme(fields: any, setEmpty: boolean = false) {
-  let temp: any = {}
-  fields.forEach((item: any, index: number) => {
+export function parseFieldSchema(fields: NameTypeInterface[], setEmpty: boolean = false) {
+  const temp: DataFieldValue = {}
+  fields.forEach((item: NameTypeInterface, index: number) => {
     temp[`field_${(index + 1)}`] = setEmpty ? '' : item.name
     temp[`select_${(index + 1)}`] = setEmpty ? '' : item.type
   });
@@ -159,7 +167,7 @@ export function decryptWithSalt(encodedData: string, salt: string) {
   }
 }
 
-export function buildPostPayload(url: string, data: any, exHeaders: { [key: string]: any } = {}) {
+export function buildPostPayload(url: string, data: object, exHeaders: DataFieldValue = {}) {
   const gSalt = generateSalt(10)
   return {
     url,
@@ -172,7 +180,7 @@ export function buildPostPayload(url: string, data: any, exHeaders: { [key: stri
   }
 }
 
-export function buildPayload(url: string, data: any, method: string = 'POST', exHeaders: { [key: string]: any } = {}) {
+export function buildPayload(url: string, data: object, method: string = 'POST', exHeaders: DataFieldValue = {}) {
   const gSalt = generateSalt(10)
   return {
     url,
@@ -184,3 +192,14 @@ export function buildPayload(url: string, data: any, method: string = 'POST', ex
     }
   }
 }
+
+export function base64ToUtf8(str: string): string {
+  return decodeURIComponent(atob(str).split('').map(function (c) {
+    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+  }).join(''));
+}
+
+export const isIsoDateFormatValid = (dateString: string): boolean => {
+  const dateObject = new Date(dateString);
+  return !isNaN(dateObject.getTime());
+};

@@ -1,21 +1,14 @@
-import { createContext, lazy, Suspense, useCallback, useContext, useState, type ReactNode } from 'react';
+import { lazy, Suspense, useCallback, useState, type ReactNode } from 'react';
+import { AppContext } from '.';
 
 type Breadcrumb = { [key: string]: string }
-
-interface AppContextInterface {
-    breadcrumbs: Breadcrumb[];
-    setBreadcrumbs: (breadcrumbs: Breadcrumb[]) => void;
-    delayTimer: (d: any, delayTime?: number) => void
-}
-
-const AppContext = createContext<AppContextInterface | undefined>(undefined);
 
 const LayoutComponents = lazy(() => import('@/layouts/layout'))
 
 export const AppProvider = ({ children }: { children: ReactNode }) => {
     const [breadcrumbs, setBreadcrumbs] = useState<Breadcrumb[]>([]);
-    
-    const delayTimer = useCallback((callback: any, delayTime: number = 1000) => {
+
+    const delayTimer = useCallback((callback: () => void, delayTime: number = 1000) => {
         setTimeout(() => {
             callback()
         }, delayTime);
@@ -35,10 +28,3 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         </AppContext.Provider>
     );
 };
-
-export const useAppContext = () => {
-    const context = useContext(AppContext);
-    if (!context) throw new Error('useAppContext must be used within AppProvider');
-    return context;
-};
-

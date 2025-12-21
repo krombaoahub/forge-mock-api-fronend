@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, type BaseSyntheticEvent } from "react";
 
 export function useOutsideClickDetector(ref: React.RefObject<HTMLElement | null>): boolean {
     const [isClickedOutside, setIsClickedOutside] = useState<boolean>(false)
     useEffect(() => {
-        const listener = (event: any) => {
+        const listener = (event: MouseEvent | BaseSyntheticEvent | TouchEvent) => {
             setIsClickedOutside(false)
             if (ref.current) {
                 if (!ref.current.contains(event.target)) {
@@ -19,7 +19,7 @@ export function useOutsideClickDetector(ref: React.RefObject<HTMLElement | null>
             document.removeEventListener('mousedown', listener);
             document.removeEventListener('touchstart', listener);
         };
-    }, []);
+    }, [ref]);
 
     return isClickedOutside
 }

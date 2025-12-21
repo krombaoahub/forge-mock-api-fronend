@@ -1,40 +1,44 @@
-import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from 'react';
-import type { WorkspaceContextInterface } from '@/interfaces';
+import { createContext, useCallback, useEffect, useState, type ReactNode } from 'react';
+import type { StateSelectorInterface, WorkspaceContextInterface } from '@/interfaces';
 import { createWorkspace, getCollectionById, getWorkspaceByUserId } from '@/services/workspace-service';
 import { Outlet, useParams } from 'react-router-dom';
 import { reInitFlyonUi } from '@/hooks/use-init-flyoui';
 import { useAppDispatch, useAppSelector } from '@/states/hooks';
 import { setErrorMsg, setLoading } from '@/states/slice/app-slice';
 import { setSelectedCollection, setId, setWorkspaces } from '@/states/slice/workspace-slice';
-// import { getCollections } from "@/services/workspace-service";
-// import { setCollections } from "@/states/slice/workspace-slice";
 import type { DocumentData } from "firebase/firestore";
 
 const WorkspaceContext = createContext<WorkspaceContextInterface | undefined>(undefined);
 
 export const WorkspaceProvider = ({ children }: { children: ReactNode }) => {
     const { workspaceId } = useParams()
-    const currentUser = useAppSelector((state) => state.app.currentUser);
+    const currentUser = useAppSelector((state: StateSelectorInterface) => state.app.currentUser);
     const dispatch = useAppDispatch()
     const [providerLoading, setProviderLoading] = useState<boolean>(true);
 
+    const currentUserId = currentUser ? currentUser.uid : ''
+
+    const handleGetWorkspace = useCallback(async () => {
+        return currentUserId ? await getWorkspaceByUserId(currentUserId)
+            .then((data) => dispatch(setWorkspaces(data)))
+            .catch((error) => dispatch(setErrorMsg(error.message))) : []
+    }, [currentUserId, dispatch])
+
     useEffect(() => {
-        console.log('Fetching workspaces...')
         setProviderLoading(true)
         handleGetWorkspace().finally(() => {
             setProviderLoading(false);
             reInitFlyonUi()
-            // handleGetCollections()
         })
-        workspaceId && dispatch(setId(workspaceId))
-    }, [])
+        if (workspaceId) dispatch(setId(workspaceId))
+    }, [dispatch, workspaceId, handleGetWorkspace])
 
     const handleGetCollectionById = useCallback(async (collectionId?: string) => {
         if (!workspaceId) { return setSelectedCollection({}); }
         return await getCollectionById(workspaceId, collectionId || '')
             .then((data) => dispatch(setSelectedCollection((data ?? {}) as DocumentData)))
             .catch((error) => dispatch(setErrorMsg(error.message)));
-    }, [workspaceId])
+    }, [workspaceId, dispatch])
 
     // const handleGetCollections = useCallback(async () => {
     //     if (!workspaceId) { return setCollections([]); }
@@ -43,22 +47,17 @@ export const WorkspaceProvider = ({ children }: { children: ReactNode }) => {
     //         .catch((error) => dispatch(setErrorMsg(error.message)));
     // }, [workspaceId])
 
-    const handleGetWorkspace = useCallback(async () => {
-        return await getWorkspaceByUserId(currentUser.localId)
-            .then((data) => dispatch(setWorkspaces(data)))
-            .catch((error) => dispatch(setErrorMsg(error.message)))
-    }, [currentUser.localId])
-
-    const handleCreateWorkspace = async (data: any, callback?: () => void) => {
+    const handleCreateWorkspace = async (data: { name: string }, callback?: () => void) => {
         dispatch(setErrorMsg(''))
         dispatch(setLoading(true))
-        await createWorkspace(currentUser.localId, data.name)
-            .then((docRef) => {
-                console.log("New workspaces added with ID:", docRef.id);
-                callback && callback()
-            })
-            .catch((error) => dispatch(setErrorMsg(error.message)))
-            .finally(() => dispatch(setLoading(false)))
+        if (currentUserId) {
+            await createWorkspace(currentUserId, data.name)
+                .then(() => {
+                    if (callback) callback()
+                })
+                .catch((error) => dispatch(setErrorMsg(error.message)))
+                .finally(() => dispatch(setLoading(false)))
+        }
     }
 
     const context = {
@@ -74,10 +73,3 @@ export const WorkspaceProvider = ({ children }: { children: ReactNode }) => {
         </WorkspaceContext.Provider>
     );
 };
-
-export const useWorkspaceContext = () => {
-    const context = useContext(WorkspaceContext);
-    if (!context) throw new Error('useAppContext must be used within AppProvider');
-    return context;
-};
-

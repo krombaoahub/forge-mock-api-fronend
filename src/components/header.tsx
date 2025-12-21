@@ -20,16 +20,14 @@ export default function Header({ dashboardHeader }: HeaderInterface) {
 
     const accordionRef = useRef(null);
 
-    let accordion: HSAccordionType = undefined
+    const hsInstanceRef = useRef<HSAccordionType | undefined>(undefined);
 
     const isClickedOutside = useOutsideClickDetector(accordionRef)
 
     useEffect(() => {
-        if (accordionRef.current) {
-            if (accordion == undefined) {
-                accordion = new HSAccordion(accordionRef.current)
-                setAccordionHS(accordion)
-            }
+        if (accordionRef.current && hsInstanceRef.current === undefined) {
+            hsInstanceRef.current = new HSAccordion(accordionRef.current);
+            setAccordionHS(hsInstanceRef.current)
         }
     }, [])
 
@@ -37,7 +35,7 @@ export default function Header({ dashboardHeader }: HeaderInterface) {
         if (accordionHS && isClickedOutside) {
             accordionHS.hide()
         }
-    }, [isClickedOutside])
+    }, [isClickedOutside, accordionHS])
 
     const handleGotoSection = useGotoSection()
 

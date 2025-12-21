@@ -57,7 +57,7 @@ export const Pricing: React.FC = () => {
 
     const setSubsType = useCallback((type: SubscriptionType) => {
         setSubscriptionType(type)
-    }, [subscriptionType])
+    }, [])
 
     return (
         <section className="w-full [&>div]:max-w-7xl py-10">

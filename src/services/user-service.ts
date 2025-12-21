@@ -3,6 +3,7 @@ import type { SaveUserProfileInterface } from "@/interfaces";
 import { timestamp } from "@/libs/utils";
 import { doc, setDoc } from "firebase/firestore";
 
+// move to api
 export async function saveUserProfile(uid: string, userData: SaveUserProfileInterface) {
     const userRef = doc(db, "users", uid);
     

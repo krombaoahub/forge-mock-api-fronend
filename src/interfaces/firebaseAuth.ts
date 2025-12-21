@@ -1,6 +1,6 @@
-import type { IdTokenResult, UserInfo, UserMetadata } from "firebase/auth";
+import type { IdTokenResult, User, UserInfo, UserMetadata } from "firebase/auth";
 
-export interface UserImplInterface {
+export interface UserImplInterface extends User {
     emailVerified: boolean;
     isAnonymous: boolean;
     metadata: UserMetadata;
@@ -18,4 +18,5 @@ export interface UserImplInterface {
     photoURL: string | null;
     providerId: string;
     uid: string;
-}
+    localId?:string;
+}   

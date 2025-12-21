@@ -40,19 +40,34 @@ export const AsideSkeleton: React.FC = () => (<>
 
 export const CollectionFormSkeleton: React.FC = () => (
     <div className="p-6 flex flex-col gap-4">
-        <div className="skeleton skeleton-animated h-9 w-34"/>
-        <div className="skeleton skeleton-animated h-9 w-full"/>
+        <div className="skeleton skeleton-animated h-9 w-34" />
+        <div className="skeleton skeleton-animated h-9 w-full" />
         <div className="flex justify-between gap-4">
-            <div className="skeleton skeleton-animated h-9 w-[50%]"/>
-            <div className="skeleton skeleton-animated h-9 w-34"/>
+            <div className="skeleton skeleton-animated h-9 w-full max-w-md" />
         </div>
-        <div className="skeleton skeleton-animated h-9 w-34"/>
-        <div className="flex justify-between gap-4">
-            <div className="skeleton skeleton-animated h-9 grow"/>
-            <div className="skeleton skeleton-animated h-9 grow"/>
+
+        <div className="flex w-full md:flex-nowrap flex-wrap gap-4">
+            <div className="skeleton skeleton-animated h-9 w-full" />
+            <div className="skeleton skeleton-animated h-9 w-full" />
         </div>
-        <div className="skeleton skeleton-animated h-9 w-34"/>
-        <div className="skeleton-striped h-34 w-full"/>
+        <div className="flex w-full md:flex-nowrap flex-wrap gap-4">
+            <div className="skeleton skeleton-animated h-9 w-full" />
+            <div className="skeleton skeleton-animated h-9 w-full" />
+        </div>
+        <div className="flex md:justify-end justify-center w-full"> 
+            <div className="skeleton skeleton-animated h-9 w-34 flex items-end" />
+        </div>
+
+        <div className="grow w-full gap-3 flex flex-col relative">
+            <h1 className="skeleton skeleton-animated w-24 h-7"></h1>
+            <div className="bg-black p-4 rounded-md overflow-auto grow max-h-64 min-h-24 skeleton-striped">
+            </div>
+        </div>
+        <div className="grow w-full gap-3 flex flex-col relative">
+            <h1 className="skeleton skeleton-animated w-24 h-7"></h1>
+            <div className="bg-black p-4 rounded-md overflow-auto grow max-h-64 min-h-24 skeleton-striped">
+            </div>
+        </div>
 
     </div>
 )

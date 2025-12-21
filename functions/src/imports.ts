@@ -7,18 +7,16 @@ import express from "express";
 import admin from "firebase-admin";
 
 
-// import rateLimit from 'express-rate-limit';
+import rateLimit from 'express-rate-limit';
 
-// const limiter = rateLimit({
-//   windowMs: 15 * 60 * 1000, // 15 minutes
-//   max: 100 // limit each IP to 100 requests per windowMs
-// });
-
-var serviceAccount = require("./service-key.json")
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-  
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100 // limit each IP to 100 requests per windowMs
 });
+
+// var serviceAccount = require("./serviceKey.json")
+
+admin.initializeApp()
 
 const db = admin.firestore();
 
@@ -26,11 +24,10 @@ const app = express();
 
 app.use(express.json());
 app.use(cors({ origin: true }));
-// app.use('/api/', limiter); // Apply to all /api/ routes
+app.use('/api/', limiter); // Apply to all /api/ routes
 app.use((req, res, next) => {
   if (req.url.indexOf("/api/") === 0) {
     req.url = req.url.substring("/api".length);
-    console.log(req.url)
   }
   next();
 });

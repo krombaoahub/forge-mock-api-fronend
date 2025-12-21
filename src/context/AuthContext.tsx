@@ -1,22 +1,22 @@
-import { createContext, useContext, useState, type ReactNode } from 'react';
+import { useState, type ReactNode } from 'react';
 import { signOut } from 'firebase/auth';
 import { auth } from '../firebase';
-import type { AuthContextInterface, LoginFormInterface, RegisterFormInterface } from '@/interfaces';
+import type { LoginFormInterface, RegisterFormInterface } from '@/interfaces';
 import type { AuthResultType } from '@/types';
 import { loginAccount, registerAccount } from '@/services/auth';
 import { Outlet, type NavigateFunction } from 'react-router-dom';
 import { useOnAuthStateChanged } from '@/hooks/use-on-auth';
 import { useAppDispatch } from '@/states/hooks';
 import { setCurrentUser, setErrorMsg, setLoading } from '@/states/slice/app-slice';
-
-const AuthContext = createContext<AuthContextInterface | undefined>(undefined);
+import { AuthContext } from '.';
+import type { UserImplInterface } from '@/interfaces/firebaseAuth';
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const dispatch = useAppDispatch()
     const [authLoading, setAuthLoading] = useState<boolean>(true);
 
 
-    useOnAuthStateChanged({ setCurrentUser: (user) => dispatch(setCurrentUser(user)), setAuthLoading })
+    useOnAuthStateChanged({ setCurrentUser: (user?: UserImplInterface) => dispatch(setCurrentUser(user)), setAuthLoading })
 
     const handleLogin = async (loginField: LoginFormInterface, navigate: NavigateFunction) => {
         dispatch(setLoading(true))
@@ -57,11 +57,5 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             {!authLoading ? children : <Outlet />}
         </AuthContext.Provider>
     );
-};
-
-export const useAuthContext = () => {
-    const context = useContext(AuthContext);
-    if (!context) throw new Error('useAppContext must be used within AppProvider');
-    return context;
 };
 

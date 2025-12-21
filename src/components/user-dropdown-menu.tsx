@@ -1,7 +1,7 @@
-import { useAuthContext } from "@/context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import ThemeDropdown from "./theme-dropdown";
 import { useAppSelector } from "@/states/hooks";
+import { useAuthContext } from "@/context";
 
 interface UserAvatarInterface {
     displayInfo?: boolean
@@ -9,7 +9,17 @@ interface UserAvatarInterface {
 
 export function UserAvatar({ displayInfo }: UserAvatarInterface) {
     const currentUser = useAppSelector((state) => state.app.currentUser);
-    // const { currentUser } = useAuthContext();
+    
+    if (!currentUser) {
+        return (<div className="flex gap-2 items-center">
+            <div className="avatar avatar-placeholder">
+                <div className={`w-10 rounded-full shadow-md border`}>
+                    <span className="icon-[tabler--user] size-4"></span>
+                </div>
+            </div>
+        </div>)
+    }
+
     const { email, displayName } = currentUser;
     return (
         <div className="flex gap-2 items-center">

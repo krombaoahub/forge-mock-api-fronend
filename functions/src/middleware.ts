@@ -1,14 +1,14 @@
 import { Request, Response, NextFunction } from 'express';
 import { admin, db } from './imports';
 // import { WORKSPACE } from './constant/collections';
-import { DocumentReference } from 'firebase-admin/firestore';
+import { DocumentData, DocumentReference } from 'firebase-admin/firestore';
 import { WORKSPACE } from './constant/collections';
 import { decryptWithSalt } from './lib/utils';
 
 export interface AuthRequest extends Request {
     authId?: string;
     workspacesRef?: DocumentReference;
-    payload?: any;
+    payload?: DocumentData;
 }
 
 export const validateAuth = async (req: AuthRequest, res: Response, next: NextFunction) => {
@@ -26,7 +26,7 @@ export const validateAuth = async (req: AuthRequest, res: Response, next: NextFu
             return next();
         } catch (error) {
             // Token is invalid/expired
-            return res.status(403).send('Unauthorized: Invalid token');
+            return res.status(403).send({ message: 'Unauthorized: Invalid token', error });
         }
     } else {
         return res.status(403).send('Unauthorized: No token provided');
@@ -36,7 +36,6 @@ export const validateAuth = async (req: AuthRequest, res: Response, next: NextFu
 export const validateWorkspaceOwner = async (req: AuthRequest, res: Response, next: NextFunction) => {
     const workspaceId = req.params.workspaceId;
     const userId = req.authId;
-    console.log({ workspaceId, userId })
 
     const docRef = db.collection(WORKSPACE);
     const workspacesRef = await docRef.doc(workspaceId)

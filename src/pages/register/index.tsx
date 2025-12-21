@@ -1,18 +1,45 @@
-import { useForm } from 'react-hook-form';
+import { useForm, type FieldError } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { registerFormSchema, type RegisterFormFields } from '@/zod/schema';
 import AuthLayout from '@/layouts/auth-layout';
 import '@/App.css'
-import { FormField } from '@/components/forms';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuthContext } from '@/context/AuthContext';
+import { useAuthContext } from '@/context';
 import AppLogo from '@/components/logo';
 import { useEffect, useState } from 'react';
-import { useAppContext } from '@/context/AppContext';
+import { useAppContext } from '@/context';
 import { useGotoSection } from '@/hooks/use-goto-section';
 import { useAppDispatch, useAppSelector } from '@/states/hooks';
 import { setErrorMsg } from '@/states/slice/app-slice';
 import { loadingAndErrorSelector } from '@/states/selector';
+import type { InputFormInterface, TInputTypes } from '@/interfaces';
+
+interface RegisterForm extends InputFormInterface {
+    field: keyof RegisterFormFields
+}
+
+const inputFields = [{
+    placeholder: 'John Doe',
+    type: 'text' as TInputTypes,
+    field: 'name' as keyof RegisterFormFields,
+    label: 'Name'
+}, {
+    placeholder: 'example@domain.com',
+    type: 'text' as TInputTypes,
+    field: 'email' as keyof RegisterFormFields,
+    label: 'Email'
+}, {
+    placeholder: '********',
+    type: 'password' as TInputTypes,
+    field: 'password' as keyof RegisterFormFields,
+    label: 'Password',
+    passwordMeter: true
+}, {
+    placeholder: '********',
+    type: 'password' as TInputTypes,
+    field: 'confirmPassword' as keyof RegisterFormFields,
+    label: 'Confirm password'
+}]
 
 export default function RegisterPage() {
     const { loading, errorMsg } = useAppSelector(loadingAndErrorSelector);
@@ -40,11 +67,11 @@ export default function RegisterPage() {
                 dispatch(setErrorMsg(''))
             }, 2500)
         }
-    }, [errorMsg, errors.root?.message]);
+    }, [errorMsg, errors.root?.message, delayTimer, dispatch]);
 
     useEffect(() => {
         return () => reset(); // cleanup on unmount
-    }, []);
+    }, [reset]);
 
 
     const handleGotoSection = useGotoSection()
@@ -64,7 +91,33 @@ export default function RegisterPage() {
                                 {errorMsg && <small className='text-red-500'>{errorMsg}</small>}
                             </div>
 
-                            <FormField handleSubmit={handleSubmit((data) => handleRegister(data, navigate))} className='w-full' inputs={[{
+                            <form onSubmit={handleSubmit((data) => handleRegister(data, navigate))} className={`flex flex-col gap-6 w-full p-6 pt-0`} >
+                                {inputFields.map((input: RegisterForm, key: number) => {
+                                    const { field, placeholder, label, type } = input
+                                    const fieldError = errors[field] as FieldError | undefined;
+                                    const keyId = 'id-' + key
+                                    return (
+                                        <div className="input-floating" key={key}>
+                                            <input type={type} placeholder={placeholder} id={keyId}
+                                                {...register(field)}
+                                                className={`input border-0 border-b rounded-none rounded-t`} />
+                                            <label htmlFor={keyId} className="input-floating-label" >{label}</label>
+                                            {fieldError && fieldError.message && (
+                                                <div className="text-sm mt-2 text-red-400 text-left">
+                                                    {fieldError.message}
+                                                </div>
+                                            )}
+                                        </div>
+                                    )
+                                })}
+                                <div className="flex justify-center w-full">
+                                    <button type="submit" className={`w-full btn btn-primary ${loading ? 'btn-disabled' : ''}`}>
+                                        {loading && <span className="loading loading-spinner"></span>}
+                                        Register
+                                    </button>
+                                </div>
+                            </form>
+                            {/* <FormField handleSubmit={handleSubmit((data) => handleRegister(data, navigate))} className='w-full' inputs={[{
                                 register,
                                 errors,
                                 className: 'border-0 border-b-1 rounded-none rounded-t',
@@ -103,7 +156,7 @@ export default function RegisterPage() {
                                         Register
                                     </button>
                                 </div>
-                            </FormField>
+                            </FormField> */}
 
                             <div className="divider">OR</div>
 

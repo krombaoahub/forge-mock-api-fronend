@@ -1,14 +1,15 @@
+import type { UserImplInterface } from "@/interfaces/firebaseAuth";
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
 interface AppStateInterface {
     loading: boolean;
-    currentUser: any | null;
+    currentUser?: UserImplInterface;
     errorMsg: string;
 }
 
 const initialState: AppStateInterface = {
     loading: false,
-    currentUser: null,
+    currentUser: undefined,
     errorMsg: '',
 }
 
@@ -19,7 +20,7 @@ export const appSlice = createSlice({
         setLoading: (state, action: PayloadAction<boolean>) => {
             state.loading = action.payload
         },
-        setCurrentUser: (state, action: PayloadAction<any | null>) => {
+        setCurrentUser: (state, action: PayloadAction<UserImplInterface | undefined>) => {
             state.currentUser = action.payload
         },
         setErrorMsg: (state, action: PayloadAction<string>) => {

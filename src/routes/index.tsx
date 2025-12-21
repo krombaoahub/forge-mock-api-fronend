@@ -29,6 +29,5 @@ interface PropsInterface {
 
 export const ProtectedRoute = ({ children }: PropsInterface) => {
     const currentUser = useAppSelector((state) => state.app.currentUser);
-    // const { currentUser } = useAuthContext();
     return currentUser ? children : <Navigate to="/" replace />;
 };
